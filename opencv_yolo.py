@@ -5,8 +5,7 @@
 import cv2
 import sys
 from imutils.video import FPS
-from detection import DetectBoxes
-import numpy as np
+from detection_boxes import DetectBoxes
 
 def get_outputs_names(net):
     # ex) conv_0, bn_0, relu_0.... names of network layers
@@ -14,8 +13,6 @@ def get_outputs_names(net):
     return [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 
-# Define parameters
-# Confidence threshold - if prediction about detection object is higher than confThreshold, it is accepted
 fileName = "assets/cars.mp4"
 
 # textGraph and weight file of model
@@ -29,73 +26,12 @@ net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
 # class names ex) person, car, truck, and etc.
 PATH_TO_LABELS = "labels/coco.names"
-confThreshold = 0.5  # Confidence threshold
-nmsThreshold = 0.4   # Non-maximum suppression threshold
 
 # load detection class, default confidence threshold is 0.5
 detect = DetectBoxes(PATH_TO_LABELS, confidence_threshold=0.5, nms_threshold=0.4)
+
 # Set window
 winName = 'YOLO'
-
-classes = detect.classes
-
-# 예측된 bounding box를 그린다
-def drawBox(frame, classId, conf, left, top, right, bottom):
-    # bounding box를 그린다
-    cv2.rectangle(frame, (left, top), (right, bottom), (255, 178, 50), 3)
-
-    label = '%.2f' % conf
-    # class 이름과 confidence 를 가지고 온다
-    if classes:
-        assert (classId < len(classes))
-        label = '%s:%s' % (classes[classId], label)
-
-    # bounding box 위에 label 을 표시한다
-    labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
-    top = max(top, labelSize[1])
-    cv2.rectangle(frame, (left, top - round(1.5 * labelSize[1])), (left + round(1.5 * labelSize[0]), top + baseLine),
-                 (255, 255, 255), cv2.FILLED)
-    cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), 2)
-
-
-# non-maximum suppression 을 사용해서 low confidence bounding box를 제거 한다
-def postprocess(frame, outs):
-    frameHeight = frame.shape[0]
-    frameWidth = frame.shape[1]
-
-    # 모든 bounding box를 scan 한다
-    # confidence 점수가 높은 bounding box들 중 class label이 가장 높은 점수를 가진 bounding box를 저장한다.
-    classIds = []
-    confidences = []
-    boxes = []
-    for out in outs:
-        for detection in out:
-            scores = detection[5:]
-            classId = np.argmax(scores)
-            confidence = scores[classId]
-            if confidence > confThreshold:
-                center_x = int(detection[0] * frameWidth)
-                center_y = int(detection[1] * frameHeight)
-                width = int(detection[2] * frameWidth)
-                height = int(detection[3] * frameHeight)
-                left = int(center_x - width / 2)
-                top = int(center_y - height / 2)
-                classIds.append(classId)
-                confidences.append(float(confidence))
-                boxes.append([left, top, width, height])
-
-    # non-maximum suppression 을 사용해서 overalapping box 중
-    # low confidence 제거 한다
-    indices = cv2.dnn.NMSBoxes(boxes, confidences, confThreshold, nmsThreshold)
-    for i in indices:
-        i = i[0]
-        box = boxes[i]
-        left = box[0]
-        top = box[1]
-        width = box[2]
-        height = box[3]
-        drawBox(frame, classIds[i], confidences[i], left, top, left + width, top + height)
-
 
 try:
     # Read Video file

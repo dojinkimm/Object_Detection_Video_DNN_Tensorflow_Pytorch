@@ -10,10 +10,8 @@ import cv2
 import sys
 from imutils.video import FPS
 import imutils
-from detection import DetectBoxes
+from detection_boxes import DetectBoxes
 
-# Define parameters
-# Confidence threshold - if prediction about detection object is higher than confThreshold, it is accepted
 fileName = "assets/cars.mp4"
 
 # textGraph and weight file of model
