@@ -7,8 +7,6 @@ import sys
 from imutils.video import FPS
 from detection import DetectBoxes
 import numpy as np
-import time
-
 
 def get_outputs_names(net):
     # ex) conv_0, bn_0, relu_0.... names of network layers
