@@ -15,6 +15,7 @@ fileName = "assets/cars.mp4"
 # Load network
 model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 # model = models.detection.maskrcnn_resnet50_fpn(pretrained=True)
+model = models.
 
 if torch.cuda.device_count() > 0:
     model.cuda()
@@ -27,17 +28,16 @@ PATH_TO_LABELS = "labels/mscoco_labels.names"
 detect = DetectBoxes(PATH_TO_LABELS, conf_threshold=0.8)
 
 
-
-
 # Process inputs
 winName = 'Faster-RCNN-Pytorch'
 try:
-    # 파일 있으면 시작을 한다
+    # Read Video file
     cap = cv2.VideoCapture(fileName)
 except IOError:
     print("Input video file", fileName, "doesn't exist")
     sys.exit(1)
 
+frameCount = 0
 fps = FPS().start()
 while True:
     hasFrame, frame = cap.read()
@@ -46,14 +46,11 @@ while True:
         break
 
     detect.detect_bounding_boxes(frame, model)
-    cv2.imshow(winName, frame)
 
+    cv2.imshow(winName, frame)
     fps.update()
-    if cv2.waitKey(cv2.CAP_PROP_FPS) & 0xFF == ord('q'):
-        fps.stop()
-        print("{}".format(fps.fps()))
-        cap.release()
-        cv2.destroyAllWindows()
+    frameCount += 1
+    if cv2.waitKey(cv2.CAP_PROP_FPS) and 0xFF == ord('q'):
         break
 
 

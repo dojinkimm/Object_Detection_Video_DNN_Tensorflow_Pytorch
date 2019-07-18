@@ -17,7 +17,7 @@ class DetectBoxes:
         self.hasMask = hasMask
         self.maskColor = [255, 178, 50]
 
-    # detect bounding boxes from give frame
+    # detect bounding boxes from given frame
     def detect_bounding_boxes(self, frame, output, masks=None):
         height = frame.shape[0]
         width = frame.shape[1]

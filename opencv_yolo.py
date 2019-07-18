@@ -8,7 +8,7 @@ from imutils.video import FPS
 from detection_boxes import DetectBoxes
 
 def get_outputs_names(net):
-    # ex) conv_0, bn_0, relu_0.... names of network layers
+    # names of network layers e.g. conv_0, bn_0, relu_0....
     layer_names = net.getLayerNames()
     return [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
