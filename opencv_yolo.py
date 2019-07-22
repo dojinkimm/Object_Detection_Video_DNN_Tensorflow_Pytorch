@@ -1,7 +1,24 @@
 import cv2
 import sys
-from imutils.video import FPS
+import time
+import argparse
 from detection_boxes import DetectBoxes
+
+
+def arg_parse():
+    """ Parsing Arguments for detection """
+
+    parser = argparse.ArgumentParser(description='Pytorch Yolov3')
+    parser.add_argument("--video", dest='video', help="Path where video is located",
+                        default="assets/cars.mp4", type=str)
+    parser.add_argument("--config", dest="config", help="Yolov3 config file", default="data/yolov3.cfg")
+    parser.add_argument("--weight", dest="weight", help="Yolov3 weight file", default="data/yolov3.weights")
+    parser.add_argument("--conf", dest="confidence", help="Confidence thershold for predictions", default=0.5)
+    parser.add_argument("--nms", dest="nmsThreshold", help="NMS threshold", default=0.4)
+    parser.add_argument("--resol", dest='resol', help="Input resolution of network. Higher "
+                                                      "increases accuracy but decreases speed",
+                        default="416", type=str)
+    return parser.parse_args()
 
 
 def get_outputs_names(net):
@@ -10,71 +27,74 @@ def get_outputs_names(net):
     return [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 
-fileName = "assets/cars.mp4"
+def main():
+    args = arg_parse()
 
-# textGraph and weight file of model
-PATH_TO_CONFIG = "data/yolov3.cfg"
-PATH_TO_MODEL_WEIGHT = "data/yolov3.weights"
+    VIDEO_PATH = args.video
 
-# Load network
-net = cv2.dnn.readNetFromDarknet(PATH_TO_CONFIG, PATH_TO_MODEL_WEIGHT)
-net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+    print("Loading network.....")
+    net = cv2.dnn.readNetFromDarknet(args.config, args.weight)
+    net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+    net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
+    print("Network successfully loaded")
 
-# class names ex) person, car, truck, and etc.
-PATH_TO_LABELS = "labels/coco.names"
+    # class names ex) person, car, truck, and etc.
+    PATH_TO_LABELS = "labels/coco.names"
 
-# load detection class, default confidence threshold is 0.5
-detect = DetectBoxes(PATH_TO_LABELS, confidence_threshold=0.5, nms_threshold=0.4)
+    # load detection class, default confidence threshold is 0.5
+    detect = DetectBoxes(PATH_TO_LABELS, confidence_threshold=args.confidence, nms_threshold=args.nmsThreshold)
 
-# Set window
-winName = 'YOLO'
+    # Set window
+    winName = 'YOLO-Opencv-DNN'
 
-try:
-    # Read Video file
-    cap = cv2.VideoCapture(fileName)
-except IOError:
-    print("Input video file", fileName, "doesn't exist")
-    sys.exit(1)
+    try:
+        # Read Video file
+        cap = cv2.VideoCapture(VIDEO_PATH)
+    except IOError:
+        print("Input video file", VIDEO_PATH, "doesn't exist")
+        sys.exit(1)
 
-frameCount = 0
-fps = FPS().start()
-while cap.isOpened():
-    hasFrame, frame = cap.read()
-    # if end of frame, program is terminated
-    if not hasFrame:
-        break
+    frameCount = 0
+    start = time.time()
+    while cap.isOpened():
+        hasFrame, frame = cap.read()
+        # if end of frame, program is terminated
+        if not hasFrame:
+            break
 
-    # Create a 4D blob from a frame.
-    blob = cv2.dnn.blobFromImage(frame, 1/255, (416, 416), (0, 0, 0), True, crop=False)
+        # Create a 4D blob from a frame.
+        blob = cv2.dnn.blobFromImage(frame, 1/255, (int(args.resol),int(args.resol)), (0, 0, 0), True, crop=False)
 
-    # Set the input to the network
-    net.setInput(blob)
+        # Set the input to the network
+        net.setInput(blob)
 
-    # Runs the forward pass
-    network_output = net.forward(get_outputs_names(net))
+        # Runs the forward pass
+        network_output = net.forward(get_outputs_names(net))
 
-    # Extract the bounding box and draw rectangles
-    detect.detect_bounding_boxes(frame, network_output)
+        # Extract the bounding box and draw rectangles
+        detect.detect_bounding_boxes(frame, network_output)
 
-    # Efficiency information
-    t, _ = net.getPerfProfile()
-    label = 'Time per frame : %0.0f ms' % abs(
-        t * 1000.0 / cv2.getTickFrequency())
-    cv2.putText(frame, label, (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0))
+        # Efficiency information
+        t, _ = net.getPerfProfile()
+        label = 'Time per frame : %0.0f ms' % abs(
+            t * 1000.0 / cv2.getTickFrequency())
+        cv2.putText(frame, label, (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0))
 
-    cv2.imshow(winName, frame)
-    fps.update()
-    frameCount += 1
-    key = cv2.waitKey(1)
-    if key & 0xFF == ord('q'):
-        break
+        cv2.imshow(winName, frame)
+        frameCount += 1
+        print("FPS {:5.2f}".format(frameCount / (time.time() - start)))
+
+        key = cv2.waitKey(1)
+        if key & 0xFF == ord('q'):
+            break
+
+    print("Video ended")
+    print("Average FPS of Video {:5.2f}".format(frameCount / (time.time() - start)))
+
+    # releases video and removes all windows generated by the program
+    cap.release()
+    cv2.destroyAllWindows()
 
 
-fps.stop()
-print("Video ended")
-print("approximate FPS {}".format(fps.fps()))
-
-# releases video and removes all windows generated by the program
-cap.release()
-cv2.destroyAllWindows()
+if __name__=="__main__":
+    main()
