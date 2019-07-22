@@ -26,7 +26,9 @@ While implementing, I referred to implementations below:
 * tensorflow 1.14.0
 * tensorflow-gpu 1.1.0<br>
 ```pip install tensorflow tensorflow-gpu```
-<br>
+<br/>
+
+
 
 
 ##Pretrained Models
@@ -59,35 +61,30 @@ https://pjreddie.com/darknet/yolo/
 
 ## Demo
 #### FasterRCNN Opencv
-<br/>
 ```
 python --video assets/cars.mp4 --pbtxt data/graph.pbtxt --frozen data/frozen_inference_graph.pb --conf 0.5
 ```
 <br/>
 
 #### MaskRCNN Opencv
-<br/>
 ```
 python --video assets/cars.mp4 --pbtxt data/graph.pbtxt --frozen data/frozen_inference_graph.pb --conf 0.5 --mask 0.3
 ```
 <br/>
 
 #### Yolo Opencv
-<br/>
 ```
 python --video assets/cars.mp4 --config data/yolov3.config --weight data/yolov3.weights --conf 0.5 --nms 0.4 --resol 416
 ```
 <br/>
 
 #### FasterRCNN Pytorch
-<br/>
 ```
 python --video assets/cars.mp4 --conf 0.5
 ```
 <br/>
 
 #### Yolo Pytorch
-<br/>
 ```
 python --video assets/cars.mp4 --config data/yolov3.config --weight data/yolov3.weights --conf 0.5 --nms 0.4 --resol 416
 ```
