@@ -9,12 +9,12 @@ def get_class_names(label_path):
 
 
 class DetectBoxes:
-    def __init__(self, label_path, confidence_threshold=0.5, nms_threshold=0, mask_threshold=0, hasMask = False):
+    def __init__(self, label_path, confidence_threshold=0.5, nms_threshold=0, mask_threshold=0, has_mask=False):
         self.classes = get_class_names(label_path)
         self.confThreshold = confidence_threshold
         self.nmsThreshold = nms_threshold
         self.maskThreshold = mask_threshold
-        self.hasMask = hasMask
+        self.hasMask = has_mask
         self.maskColor = [255, 178, 50]
 
     # detect bounding boxes from given frame

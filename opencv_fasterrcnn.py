@@ -4,7 +4,6 @@
 # faster_rcnn_inception_v2_coco_2018_01_28
 #
 #
-#
 
 import cv2
 import sys
@@ -41,7 +40,7 @@ except IOError:
 
 frameCount = 0
 fps = FPS().start()
-while True:
+while cap.isOpened():
     hasFrame, frame = cap.read()
     # if end of frame, program is terminated
     if not hasFrame:
@@ -71,7 +70,8 @@ while True:
     cv2.imshow(winName, frame)
     fps.update()
     frameCount += 1
-    if cv2.waitKey(cv2.CAP_PROP_FPS) and 0xFF == ord('q'):
+    key = cv2.waitKey(1)
+    if key & 0xFF == ord('q'):
         break
 
 

@@ -97,7 +97,7 @@ try:
 
         frameCount = 0
         fps = FPS().start()
-        while True:
+        while cap.isOpened():
             hasFrame, frame = cap.read()
             # if end of frame, program is terminated
             if not hasFrame:

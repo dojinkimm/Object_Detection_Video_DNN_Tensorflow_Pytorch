@@ -1,11 +1,8 @@
-#
-# Tested on following pretrained models:
-#
-
 import cv2
 import sys
 from imutils.video import FPS
 from detection_boxes import DetectBoxes
+
 
 def get_outputs_names(net):
     # names of network layers e.g. conv_0, bn_0, relu_0....
@@ -16,8 +13,8 @@ def get_outputs_names(net):
 fileName = "assets/cars.mp4"
 
 # textGraph and weight file of model
-PATH_TO_CONFIG = "darknet/yolov3.cfg"
-PATH_TO_MODEL_WEIGHT = "darknet/yolov3.weights"
+PATH_TO_CONFIG = "data/yolov3.cfg"
+PATH_TO_MODEL_WEIGHT = "data/yolov3.weights"
 
 # Load network
 net = cv2.dnn.readNetFromDarknet(PATH_TO_CONFIG, PATH_TO_MODEL_WEIGHT)
@@ -42,7 +39,7 @@ except IOError:
 
 frameCount = 0
 fps = FPS().start()
-while True:
+while cap.isOpened():
     hasFrame, frame = cap.read()
     # if end of frame, program is terminated
     if not hasFrame:
@@ -69,7 +66,8 @@ while True:
     cv2.imshow(winName, frame)
     fps.update()
     frameCount += 1
-    if cv2.waitKey(cv2.CAP_PROP_FPS) and 0xFF == ord('q'):
+    key = cv2.waitKey(1)
+    if key & 0xFF == ord('q'):
         break
 
 

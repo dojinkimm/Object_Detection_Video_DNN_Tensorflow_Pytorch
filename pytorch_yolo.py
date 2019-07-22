@@ -1,39 +1,39 @@
-#
-# Tested on following pretrained models:
-# fasterrcnn_resnet50_fpn
-# maskrcnn_resnet50_fpn
-#
-# These models are provided by pytorch framework itself
-#
-
+from __future__ import division
+import time
 import cv2
 import sys
-from torchvision import models
-from imutils.video import FPS
 import torch
+from darknet import Darknet
 from detection_boxes_pytorch import DetectBoxes
+from imutils.video import FPS
+
 
 fileName = "assets/cars.mp4"
 
 print("Loading network.....")
-# Load network
-model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
-# model = models.detection.maskrcnn_resnet50_fpn(pretrained=True)
+model = Darknet("data/yolov3.cfg")
+model.load_weights("data/yolov3.weights")
 print("Network successfully loaded")
+
+model.net_info["height"] = 416
+inp_dim = int(model.net_info["height"])
+assert inp_dim % 32 == 0
+assert inp_dim > 32
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 model.eval()
 
-# class names ex) person, car, truck, and etc.
-PATH_TO_LABELS = "labels/mscoco_labels.names"
+PATH_TO_LABELS = 'labels/coco.names'
 
 # load detection class, default confidence threshold is 0.5
-detect = DetectBoxes(PATH_TO_LABELS, conf_threshold=0.8)
+detect = DetectBoxes(PATH_TO_LABELS, conf_threshold=0.5, nms_threshold=0.4)
 
 
-# Process inputs
-winName = 'Faster-RCNN-Pytorch'
+# Set window
+winName = 'YOLO'
+
 try:
     # Read Video file
     cap = cv2.VideoCapture(fileName)
@@ -42,22 +42,22 @@ except IOError:
     sys.exit(1)
 
 frameCount = 0
+start = time.time()
 fps = FPS().start()
 while cap.isOpened():
     hasFrame, frame = cap.read()
-    # if end of frame, program is terminated
+
     if not hasFrame:
         break
 
-    detect.bounding_box_rcnn(frame, model=model)
+    detect.bounding_box_yolo(frame, inp_dim, model)
 
     cv2.imshow(winName, frame)
-    fps.update()
     frameCount += 1
+    fps.update()
     key = cv2.waitKey(1)
     if key & 0xFF == ord('q'):
         break
-
 
 fps.stop()
 print("Video ended")
