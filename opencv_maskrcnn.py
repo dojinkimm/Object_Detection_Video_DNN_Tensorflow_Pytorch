@@ -19,8 +19,8 @@ def arg_parse():
                         default="assets/cars.mp4", type=str)
     parser.add_argument("--pbtxt", dest="pbtxt", help="pbtxt file", default="mask_rcnn_inception_v2_coco_2018_01_28/graph.pbtxt")
     parser.add_argument("--frozen", dest="frozen", help="Frozen inference pb file", default="mask_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb")
-    parser.add_argument("--conf", dest="confidence", help="Confidence thershold for predictions", default=0.5)
-    parser.add_argument("--mask", dest="mask", help="Mask thershold for predictions", default=0.3)
+    parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
+    parser.add_argument("--mask", dest="mask", help="Mask threshold for predictions", default=0.3)
     return parser.parse_args()
 
 

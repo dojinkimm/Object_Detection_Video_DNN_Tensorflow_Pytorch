@@ -21,7 +21,7 @@ def arg_parse():
     parser = argparse.ArgumentParser(description='Pytorch Pretrained FasterRCNN')
     parser.add_argument("--video", dest='video', help="Path where video is located",
                         default="assets/cars.mp4", type=str)
-    parser.add_argument("--conf", dest="confidence", help="Confidence thershold for predictions", default=0.5)
+    parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
 
     return parser.parse_args()
 
