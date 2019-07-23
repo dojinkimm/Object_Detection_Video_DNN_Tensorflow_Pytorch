@@ -5,7 +5,6 @@ from torch.autograd import Variable
 from p_utils.util import write_results, prep_image
 
 
-
 def get_class_names(label_path):
     with open(label_path, 'rt') as f:
         classes = f.read().rstrip('\n').split('\n')

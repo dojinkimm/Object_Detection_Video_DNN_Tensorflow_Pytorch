@@ -1,5 +1,6 @@
 # models
 darknet/*
+!darknet/yolo_anchors.txt
 faster_rcnn_resnet101_coco_2018_01_28/*
 faster_rcnn_inception_v2_coco_2018_01_28/*
 faster_rcnn_resnet50_coco_2018_01_28/*

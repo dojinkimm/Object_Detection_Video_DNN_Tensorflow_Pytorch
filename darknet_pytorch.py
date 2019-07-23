@@ -266,21 +266,17 @@ def create_modules(blocks):
             detection = DetectionLayer(anchors)
             module.add_module("Detection_{}".format(index), detection)
         
-            
-            
+
         else:
             print("Something I dunno")
             assert False
-
 
         module_list.append(module)
         prev_filters = filters
         output_filters.append(filters)
         index += 1
-        
-    
-    return (net_info, module_list)
 
+    return (net_info, module_list)
 
 
 class Darknet(nn.Module):
@@ -288,24 +284,20 @@ class Darknet(nn.Module):
         super(Darknet, self).__init__()
         self.blocks = parse_cfg(cfgfile)
         self.net_info, self.module_list = create_modules(self.blocks)
-        self.header = torch.IntTensor([0,0,0,0])
+        self.header = torch.IntTensor([0, 0, 0, 0])
         self.seen = 0
 
-        
-        
     def get_blocks(self):
         return self.blocks
     
     def get_module_list(self):
         return self.module_list
 
-                
     def forward(self, x, device):
         detections = []
         modules = self.blocks[1:]
         outputs = {}   #We cache the outputs for the route layer
-        
-        
+
         write = 0
         for i in range(len(modules)):        
             
@@ -315,7 +307,6 @@ class Darknet(nn.Module):
                 x = self.module_list[i](x)
                 outputs[i] = x
 
-                
             elif module_type == "route":
                 layers = modules[i]["layers"]
                 layers = [int(a) for a in layers]

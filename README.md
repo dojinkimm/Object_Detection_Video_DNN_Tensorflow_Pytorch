@@ -12,7 +12,7 @@ While implementing, I referred to implementations below:
 
 * Opencv Dnn, Pytorch FasterRCNN - https://github.com/spmallick/learnopencv<br>
 * Pytorch-Yolo - https://github.com/ayooshkathuria/pytorch-yolo-v3<br>
-* Tensorflow
+* Tensorflow, Tensorflow-Yolo - https://github.com/wizyoung/YOLOv3_TensorFlow<br>
 
 ## Requirements
 
@@ -86,6 +86,6 @@ python --video assets/cars.mp4 --conf 0.5
 
 #### Yolo Pytorch
 ```
-python --video assets/cars.mp4 --config data/yolov3.config --weight data/yolov3.weights --conf 0.5 --nms 0.4 --resol 416
+python --video assets/cars.mp4 --config data/yolov3.config --weight data/yolov3.weights --conf 0.5 --nms 0.4 --resolution 416
 ```
 <br/>
