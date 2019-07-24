@@ -75,7 +75,7 @@ def main():
         t, _ = net.getPerfProfile()
         elapsed = abs(t * 1000.0 / cv2.getTickFrequency())
         label = 'Time per frame : %0.0f ms' % elapsed
-        cv2.putText(frame, label, (0, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0))
+        cv2.putText(frame, label, (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
 
         cv2.imshow(winName, frame)
         print("FPS {:5.2f}".format(1000/elapsed))

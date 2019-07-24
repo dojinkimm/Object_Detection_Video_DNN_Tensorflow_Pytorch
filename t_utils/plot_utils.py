@@ -3,18 +3,9 @@
 from __future__ import division, print_function
 
 import cv2
-import random
 
 
-# def get_color_table(class_num, seed=2):
-#     random.seed(seed)
-#     color_table = {}
-#     for i in range(class_num):
-#         color_table[i] = [random.randint(0, 255) for _ in range(3)]
-#     return color_table
-#
-
-def plot_one_box(img, coord, label=None):
+def draw_bounding_box_yolo(img, coord, label=None):
     '''
     coord: [x_min, y_min, x_max, y_max] format coordinates.
     img: img to plot on.

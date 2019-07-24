@@ -692,7 +692,7 @@ def visualize_boxes_and_labels_on_image_array(
     keypoints=None,
     track_ids=None,
     use_normalized_coordinates=False,
-    max_boxes_to_draw=20,
+    max_boxes_to_draw=50,
     min_score_thresh=.5,
     agnostic_mode=False,
     line_thickness=4,
@@ -752,10 +752,8 @@ def visualize_boxes_and_labels_on_image_array(
   box_to_instance_boundaries_map = {}
   box_to_keypoints_map = collections.defaultdict(list)
   box_to_track_ids_map = {}
-  # 최대 그릴 갯수 지정 안되면 box수 만큼 그린다
   if not max_boxes_to_draw:
     max_boxes_to_draw = boxes.shape[0]
-  # 둘중 더 작은 값으로 그리기 시작한다
   for i in range(min(max_boxes_to_draw, boxes.shape[0])):
     if scores is None or scores[i] > min_score_thresh:
       box = tuple(boxes[i].tolist())

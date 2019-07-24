@@ -9,16 +9,16 @@ import sys
 import tensorflow as tf
 import numpy as np
 
-from darknet_tensorflow import yolov3
-from t_utils.misc_utils import parse_anchors, load_weights
+from darknet_tensorflow import Darknet
+from t_utils.data_process import parse_anchors, load_weights
 
 num_class = 80
 img_size = 416
-weight_path = './data/darknet_weights/yolov3.weights'
-save_path = './data/darknet_weights/yolov3.ckpt'
-anchors = parse_anchors('./data/yolo_anchors.txt')
+weight_path = './darknet/yolov3.weights'
+save_path = './darknet/yolov3.ckpt'
+anchors = parse_anchors('./darknet/yolo_anchors.txt')
 
-model = yolov3(80, anchors)
+model = Darknet(80, anchors)
 with tf.Session() as sess:
     inputs = tf.placeholder(tf.float32, [1, img_size, img_size, 3])
 

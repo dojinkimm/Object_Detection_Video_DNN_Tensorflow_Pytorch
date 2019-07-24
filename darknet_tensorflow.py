@@ -135,7 +135,6 @@ class Darknet(object):
         # prob_logits: [N, 13, 13, 3, class_num]
         return x_y_offset, boxes, conf_logits, prob_logits
 
-
     def predict(self, feature_maps):
         '''
         Receive the returned feature_maps from `forward` function,

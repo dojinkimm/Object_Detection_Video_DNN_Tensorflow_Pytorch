@@ -76,6 +76,9 @@ def main():
 
     category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABELS, use_display_name=True)
 
+    # Set window
+    winName = 'Faster-RCNN-Tensorflow'
+
     try:
         # Read Video file
         cap = cv2.VideoCapture(VIDEO_PATH)
@@ -107,10 +110,10 @@ def main():
                     if not hasFrame:
                         break
 
+                    # Actual Detection
                     start = time.time()
-
-                    # Actual detection.
                     output_dict = run_inference_for_single_image(image_np, tensor_dict, sess)
+                    end = time.time()
 
                     # Visualization of the results of a detection.
                     vis_util.visualize_boxes_and_labels_on_image_array(
@@ -124,9 +127,9 @@ def main():
                                             line_thickness=8,
                                             min_score_thresh=args.confidence)
 
-                    end = time.time()
+                    cv2.putText(image_np, '{:.2f}ms'.format((end - start) * 1000), (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
 
-                    cv2.imshow('object_detection', image_np)
+                    cv2.imshow(winName, image_np)
                     print("FPS {:5.2f}".format(1/(end - start)))
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):

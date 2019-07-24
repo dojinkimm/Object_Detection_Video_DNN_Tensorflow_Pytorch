@@ -66,6 +66,8 @@ def main():
         detect.bounding_box_rcnn(frame, model=model)
         end = time.time()
 
+        cv2.putText(frame, '{:.2f}ms'.format((end - start) * 1000), (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
+
         cv2.imshow(winName, frame)
         print("FPS {:5.2f}".format(1/(end-start)))
 
