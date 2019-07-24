@@ -60,7 +60,7 @@ def run_inference_for_single_image(image, tensor_dict, sess):
 def main():
     args = arg_parse()
 
-    VIDEO_PATH = args.video
+    VIDEO_PATH = args.video if not args.webcam else 0
 
     # List of the strings that is used to add correct label for each box.
     PATH_TO_LABELS = os.path.join('labels', 'mscoco_label_map.pbtxt')

@@ -20,13 +20,14 @@ def arg_parse():
     parser.add_argument("--pbtxt", dest="pbtxt", help="pbtxt file", default="faster_rcnn_resnet101_coco_2018_01_28/graph.pbtxt")
     parser.add_argument("--frozen", dest="frozen", help="Frozen inference pb file", default="faster_rcnn_resnet101_coco_2018_01_28/frozen_inference_graph.pb")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
+    parser.add_argument("--webcam", help="Detect with web camera", default=False)
     return parser.parse_args()
 
 
 def main():
     args = arg_parse()
 
-    VIDEO_PATH = args.video
+    VIDEO_PATH = args.video if not args.webcam else 0
 
     print("Loading network.....")
     net = cv2.dnn.readNetFromTensorflow(args.frozen, args.pbtxt)

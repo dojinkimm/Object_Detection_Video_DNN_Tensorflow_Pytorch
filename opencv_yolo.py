@@ -17,6 +17,7 @@ def arg_parse():
     parser.add_argument("--resol", dest='resol', help="Input resolution of network. Higher "
                                                       "increases accuracy but decreases speed",
                         default="416", type=str)
+    parser.add_argument("--webcam", help="Detect with web camera", default=False)
     return parser.parse_args()
 
 
@@ -29,7 +30,7 @@ def get_outputs_names(net):
 def main():
     args = arg_parse()
 
-    VIDEO_PATH = args.video
+    VIDEO_PATH = args.video if not args.webcam else 0
 
     print("Loading network.....")
     net = cv2.dnn.readNetFromDarknet(args.config, args.weight)

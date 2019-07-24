@@ -22,6 +22,7 @@ def arg_parse():
     parser.add_argument("--video", dest='video', help="Path where video is located",
                         default="assets/cars.mp4", type=str)
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
+    parser.add_argument("--webcam", help="Detect with web camera", default=False)
 
     return parser.parse_args()
 
@@ -29,7 +30,7 @@ def arg_parse():
 def main():
     args = arg_parse()
 
-    VIDEO_PATH = args.video
+    VIDEO_PATH = args.video if not args.webcam else 0
 
     print("Loading network.....")
     model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)

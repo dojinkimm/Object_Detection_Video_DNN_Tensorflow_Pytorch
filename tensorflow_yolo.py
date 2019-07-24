@@ -19,6 +19,8 @@ def arg_parse():
     parser = argparse.ArgumentParser(description="Tensorflow Yolov3")
     parser.add_argument("--video", dest='video', help="Path where video is located",
                         default="assets/cars.mp4", type=str)
+    parser.add_argument("--ckpt",  type=str, default="darknet/yolov3.ckpt",
+                        help="The path of the weights to restore.")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
     parser.add_argument("--nms", dest="nmsThreshold", help="NMS threshold", default=0.4)
     parser.add_argument("--anchor_path", type=str, default="darknet/yolo_anchors.txt",
@@ -28,8 +30,8 @@ def arg_parse():
                         default=416, type=int)
     parser.add_argument("--letterbox_resize", type=lambda x: (str(x).lower() == 'true'), default=True,
                         help="Whether to use the letterbox resize.")
-    parser.add_argument("--restore_path", type=str, default="darknet/yolov3.ckpt",
-                        help="The path of the weights to restore.")
+    parser.add_argument("--webcam", help="Detect with web camera", default=False)
+
     return parser.parse_args()
 
 
@@ -42,7 +44,7 @@ def main():
     anchors = parse_anchors(args.anchor_path)
     classes = read_class_names(PATH_TO_LABELS)
     num_classes = len(classes)
-    VIDEO_PATH = args.video
+    VIDEO_PATH = args.video if not args.webcam else 0
 
     inp_dim = args.resol
 
@@ -59,7 +61,7 @@ def main():
                                         max_boxes=200, score_thresh=args.confidence, nms_thresh=args.nmsThreshold)
 
         saver = tf.train.Saver()
-        saver.restore(sess, args.restore_path)
+        saver.restore(sess, args.ckpt)
 
         # Set window
         winName = 'YOLO-Tensorflow'
