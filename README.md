@@ -1,4 +1,6 @@
 # Simple Video Object Detection using Opencv Dnn, Tensorflow, Pytorch
+**한글**로 된 README를 보기 위해서는 해당 링크로 가면 됩니다 - [README-kr](/readme/README-kr.md)
+
 This project is a simple opencv, tensorflow, pytorch implementation of **Faster RCNN**, **Mask RCNN**, **YOLO**. 
 The purpose of this project is to implement a simple object detection program using various frameworks.
 Object detection programs were tested on CPU environment as well as on GPU(NVIDIA GeForce GTX 1080).
@@ -52,7 +54,7 @@ https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc
 1.1 Go to Yolo page.<br/>
 https://pjreddie.com/darknet/yolo/
 
-1.2 Download pre-trained model, place files under `darknet` folder(The project was tested only on Yolov3)
+1.2 Download pre-trained model, place files under `darknet` directory(The project was tested only on Yolov3)
 
 ### 3. Pytorch automatic pre-trained model
 From `torchvision 0.3.0` pre-trained model for object detection is provided. The framework automatically downloads `pth` file.
@@ -66,7 +68,7 @@ model = models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 
 ### 1. Tensorflow Pre-trained model => Opencv Dnn
 In order to use pre-trained model in **Opencv**, frozen inference graph file `.pb` must be converted to `.pbtxt` file.
-The way to convert `.pb` file differs by network architecture <br/>
+The way to convert `.pb` file differs by object detection architecture <br/>
 Example) if downloaded pre-trained model is faster rcnn
 ```Shell
 $ python tf_text_graph_faster_rcnn.py --input /path/to/.pb --output /path/to/.pbtxt --config /path/to/pipeline.config
@@ -119,8 +121,8 @@ python tensorflow_pretrained.py --video assets/cars.mp4 --frozen /path/to/frozen
 python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --achor_path darknet/yolo_anchors.txt --resolution 416
 ```
 
-## Running Demo on Webcam
-In order to run object detection on webcam, simply remove `--video` and add `--webcam`. This is same to other programs as well.<br/>
+## Running Demos on Webcam
+In order to run object detection on webcam, simply remove `--video` and add `--webcam True`. This is same to other programs as well.<br/>
 Example)  fasterrcnn pytorch
 ```Shell
 python pytorch_pretrained.py --webcam True --conf 0.5
