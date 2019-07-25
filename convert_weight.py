@@ -4,12 +4,9 @@
 
 from __future__ import division, print_function
 
-import os
-import sys
 import tensorflow as tf
-import numpy as np
 
-from darknet_tensorflow import Darknet
+from models.darknet_tensorflow import Darknet
 from t_utils.data_process import parse_anchors, load_weights
 
 num_class = 80

@@ -12,7 +12,7 @@ import sys
 import time
 from torchvision import models
 import torch
-from detection_boxes_pytorch import DetectBoxes
+from p_utils.detection_boxes_pytorch import DetectBoxes
 
 
 def arg_parse():
@@ -56,6 +56,7 @@ def main():
     except IOError:
         print("Input video file", VIDEO_PATH, "doesn't exist")
         sys.exit(1)
+
 
     while cap.isOpened():
         hasFrame, frame = cap.read()

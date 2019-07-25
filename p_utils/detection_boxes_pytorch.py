@@ -56,9 +56,9 @@ class DetectBoxes:
         # Image is converted to image Tensor
         transform = transforms.Compose([transforms.ToTensor()])
         img = transform(frame).to(self.device)
-
-        # The image is passed through model to get predictions
-        pred = model([img])
+        with torch.no_grad():
+            # The image is passed through model to get predictions
+            pred = model([img])
 
         # classes, bounding boxes, confidence scores are gained
         # only classes and bounding boxes > confThershold are passed to draw_boxes

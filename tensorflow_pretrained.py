@@ -4,9 +4,8 @@ import tensorflow as tf
 import cv2
 import argparse
 
-from t_utils import ops as utils_ops
+from t_utils import ops as utils_ops, detection_boxes_tensorflow as vis
 from t_utils import label_map_util
-from t_utils import visualization_utils as vis_util
 import time
 import sys
 
@@ -20,6 +19,7 @@ def arg_parse():
     parser.add_argument("--frozen", dest="frozen", help="Frozen inference pb file",
                         default="faster_rcnn_resnet101_coco_2018_01_28/frozen_inference_graph.pb")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
+    parser.add_argument("--webcam", help="Detect with web camera", default=False)
 
     return parser.parse_args()
 
@@ -116,7 +116,7 @@ def main():
                     end = time.time()
 
                     # Visualization of the results of a detection.
-                    vis_util.visualize_boxes_and_labels_on_image_array(
+                    vis.visualize_boxes_and_labels_rcnn(
                                             image_np,
                                             output_dict['detection_boxes'],
                                             output_dict['detection_classes'],
@@ -124,10 +124,10 @@ def main():
                                             category_index,
                                             instance_masks=output_dict.get('detection_masks'),
                                             use_normalized_coordinates=True,
-                                            line_thickness=8,
                                             min_score_thresh=args.confidence)
 
-                    cv2.putText(image_np, '{:.2f}ms'.format((end - start) * 1000), (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
+                    cv2.putText(image_np, '{:.2f}ms'.format((end - start) * 1000), (40, 40),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
 
                     cv2.imshow(winName, image_np)
                     print("FPS {:5.2f}".format(1/(end - start)))

@@ -11,8 +11,8 @@ import time
 
 from t_utils.data_process import letterbox_resize, parse_anchors, read_class_names
 from t_utils.nms_utils import gpu_nms
-from t_utils.plot_utils import draw_bounding_box_yolo
-from darknet_tensorflow import Darknet
+from models.darknet_tensorflow import Darknet
+from t_utils import detection_boxes_tensorflow as vis
 
 
 def arg_parse():
@@ -33,6 +33,30 @@ def arg_parse():
     parser.add_argument("--webcam", help="Detect with web camera", default=False)
 
     return parser.parse_args()
+
+
+def run_inference_for_single_image(frame, lbox_resize, sess, input_data, inp_dim, boxes, scores, labels):
+    if lbox_resize:
+        img, resize_ratio, dw, dh = letterbox_resize(frame, inp_dim, inp_dim)
+    else:
+        height_ori, width_ori = frame.shape[:2]
+        img = cv2.resize(frame, tuple([inp_dim, inp_dim]))
+
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = np.asarray(img, np.float32)
+    img = img[np.newaxis, :] / 255.
+
+    boxes_, scores_, labels_ = sess.run([boxes, scores, labels], feed_dict={input_data: img})
+
+    # rescale the coordinates to the original image
+    if lbox_resize:
+        boxes_[:, [0, 2]] = (boxes_[:, [0, 2]] - dw) / resize_ratio
+        boxes_[:, [1, 3]] = (boxes_[:, [1, 3]] - dh) / resize_ratio
+    else:
+        boxes_[:, [0, 2]] *= (width_ori / float(inp_dim))
+        boxes_[:, [1, 3]] *= (height_ori / float(inp_dim))
+
+    return boxes_, scores_, labels_
 
 
 def main():
@@ -78,32 +102,27 @@ def main():
             if not hasFrame:
                 break
 
-            if args.letterbox_resize:
-                img, resize_ratio, dw, dh = letterbox_resize(frame, inp_dim, inp_dim)
-            else:
-                height_ori, width_ori = frame.shape[:2]
-                img = cv2.resize(frame, tuple([inp_dim, inp_dim]))
-
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            img = np.asarray(img, np.float32)
-            img = img[np.newaxis, :] / 255.
-
+            # Actual Detection
             start = time.time()
-            boxes_, scores_, labels_ = sess.run([boxes, scores, labels], feed_dict={input_data: img})
+            boxes_, scores_, labels_ = run_inference_for_single_image(frame,
+                                                                      args.letterbox_resize,
+                                                                      sess,
+                                                                      input_data,
+                                                                      inp_dim,
+                                                                      boxes,
+                                                                      scores,
+                                                                      labels)
             end = time.time()
 
-            # rescale the coordinates to the original image
-            if args.letterbox_resize:
-                boxes_[:, [0, 2]] = (boxes_[:, [0, 2]] - dw) / resize_ratio
-                boxes_[:, [1, 3]] = (boxes_[:, [1, 3]] - dh) / resize_ratio
-            else:
-                boxes_[:, [0, 2]] *= (width_ori/float(inp_dim))
-                boxes_[:, [1, 3]] *= (height_ori/float(inp_dim))
+            # Visualization of the results of a detection
+            vis.visualize_boxes_and_labels_yolo(frame,
+                                                boxes_,
+                                                classes,
+                                                labels_,
+                                                scores_,
+                                                use_normalized_coordinates=False)
 
-            for i in range(len(boxes_)):
-                x0, y0, x1, y1 = boxes_[i]
-                draw_bounding_box_yolo(frame, [x0, y0, x1, y1], label=classes[labels_[i]] + ', {:.2f}%'.format(scores_[i] * 100))
-                cv2.putText(frame, '{:.2f}ms'.format((end - start) * 1000), (40, 40),
+            cv2.putText(frame, '{:.2f}ms'.format((end - start) * 1000), (40, 40),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 0, 0), 2)
             cv2.imshow(winName, frame)
             print("FPS {:5.2f}".format(1 / (end - start)))
