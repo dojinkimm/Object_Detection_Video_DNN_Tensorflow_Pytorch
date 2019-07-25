@@ -18,7 +18,7 @@ from t_utils import detection_boxes_tensorflow as vis
 def arg_parse():
     parser = argparse.ArgumentParser(description="Tensorflow Yolov3")
     parser.add_argument("--video", dest='video', help="Path where video is located",
-                        default="assets/[ep[.mp4", type=str)
+                        default="assets/cars.mp4", type=str)
     parser.add_argument("--ckpt",  type=str, default="darknet/yolov3.ckpt",
                         help="The path of the weights to restore.")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
