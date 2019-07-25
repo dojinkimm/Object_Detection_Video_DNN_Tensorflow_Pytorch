@@ -122,8 +122,8 @@ python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --c
 
 <img src="readme/macpro.gif" width="600px"/>
 <div style="display:inline-block;">
-<img src="readme/peopledesk.png" width="400px"/>
-<img src="readme/people_building.png" width="400px"/>
+<img src="readme/peopledesk.png" height="400px"/>
+<img src="readme/people_building.png" height="400px"/>
 </div>
 
 
@@ -134,13 +134,9 @@ Example)  fasterrcnn pytorch
 python pytorch_pretrained.py --webcam True --conf 0.5
 ```
 
-Video by Videogrammer from Pexels cars
-
-Video by Pixly Videos from Pexels
-Video by Life of Pix from Pexels
-
-Video by Adailton Batista from Pexels children
-Video by George Morina from Pexels beauticars
-
-Coverr carsss
-clara blasco short car
+### Credits:
+Video by Pixabay from Pexels<br/>
+Video by clara blasco from Pexels <br/>
+Video by Pixly Videos from Pexels<br/>
+Video by Life of Pix from Pexels<br/>
+Video by George Morina from Pexels <br/>
