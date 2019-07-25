@@ -122,8 +122,8 @@ python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --c
 
 <img src="readme/macpro.gif" width="600px"/>
 <div style="display:inline-block;">
-<img src="readme/peopledesk.png" height="400px"/>
-<img src="readme/people_building.png" height="400px"/>
+<img src="readme/peopledesk.png" width="400px"/>
+<img src="readme/people_building.png" width="500px"/>
 </div>
 
 
