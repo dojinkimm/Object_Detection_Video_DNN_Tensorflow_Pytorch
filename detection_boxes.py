@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from colors import *
 
 
 def get_class_names(label_path):
@@ -102,21 +103,26 @@ class DetectBoxes:
 
     # draw boxes higher than confidence threshold
     def draw_boxes(self, frame, class_id, conf, left, top, right, bottom):
-        # draw a bounding box
-        cv2.rectangle(frame, (left, top), (right, bottom), (255, 178, 50), 3)
-
+        color, txt_color = ((0, 0, 0), (0, 0, 0))
         label = '{}%'.format(round((conf*100), 1))
         if self.classes:
             assert (class_id < len(self.classes))
             label = '%s %s' % (self.classes[class_id], label)
+            color = STANDARD_COLORS[class_id % len(STANDARD_COLORS)]
+
+        if sum(color) < 500:
+            txt_color = (255, 255, 255)
+
+        # draw a bounding box
+        cv2.rectangle(frame, (left, top), (right, bottom), color=color, thickness=3)
 
         # put label on top of detected bounding box
         label_size, base_line = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
         top = max(top, label_size[1])
         cv2.rectangle(frame, (left, top - round(1.5 * label_size[1])),
                       (left + round(1.5 * label_size[0]), top + base_line),
-                      (255, 255, 255), cv2.FILLED)
-        cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), 2)
+                      color=color, thickness=cv2.FILLED)
+        cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color=txt_color, thickness=2)
 
     def draw_masks(self, frame, class_mask, left, top, right, bottom):
         class_mask= cv2.resize(class_mask, (right - left + 1, bottom - top + 1))

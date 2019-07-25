@@ -8,7 +8,11 @@ mask_rcnn_inception_v2_coco_2018_01_28/*
 
 # images and videos and pretrained models
 data/*
-assets/short.mp4
+assets/*
+!assets/cars.mp4
+!assets/cars2.mp4
+!assets/peopledesk.mp4
+
 
 
 # auto-generated folders
