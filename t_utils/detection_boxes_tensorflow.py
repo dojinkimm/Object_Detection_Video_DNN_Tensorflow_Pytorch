@@ -23,7 +23,6 @@ import collections
 # Set headless-friendly backend.
 import matplotlib;
 
-matplotlib.use('Agg')  # pylint: disable=multiple-statements
 import matplotlib.pyplot as plt  # pylint: disable=g-import-not-at-top
 import numpy as np
 import PIL.Image as Image
@@ -34,6 +33,8 @@ import tensorflow as tf
 import cv2
 
 from colors import *
+
+matplotlib.use('Agg')  # pylint: disable=multiple-statements
 
 _TITLE_LEFT_MARGIN = 10
 _TITLE_TOP_MARGIN = 10
