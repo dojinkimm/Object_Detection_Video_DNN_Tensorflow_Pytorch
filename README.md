@@ -83,10 +83,6 @@ python convert_weight.py
 After the command, `ckpt` file and other necessary files for yolo object detection will be placed under `darknet` directory.
 
 ## Running Demos
-<div style="display:inline-block;">
-<img src="readme/macpro.gif" width="600px"/>
-<img src="readme/cars.gif" width="600px"/>
-</div>
 Assuming that video file is under `assets` directory and yolo `weights, ckpt, cfg` files under `darknet` directory.
 Replace `/path/to/...` part with actual path to files.
 #### FasterRCNN Opencv
@@ -123,10 +119,13 @@ python tensorflow_pretrained.py --video assets/cars.mp4 --frozen /path/to/frozen
 ```Shell
 python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --achor_path darknet/yolo_anchors.txt --resolution 416
 ```
+
+<img src="readme/macpro.gif" width="600px"/>
 <div style="display:inline-block;">
-<img src="readme/peopledesk.png" width="600px"/>
-<img src="readme/people_building.png" width="600px"/>
+<img src="readme/peopledesk.png" width="400px"/>
+<img src="readme/people_building.png" width="400px"/>
 </div>
+
 
 ## Running Demos on Webcam
 In order to run object detection on webcam, simply remove `--video` and add `--webcam True`. This is same to other programs as well.<br/>
