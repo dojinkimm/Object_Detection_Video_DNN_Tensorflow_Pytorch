@@ -25,8 +25,8 @@ def arg_parse():
     parser.add_argument("--nms", dest="nmsThreshold", help="NMS threshold", default=0.4)
     parser.add_argument("--anchor_path", type=str, default="darknet/yolo_anchors.txt",
                         help="The path of the anchor txt file.")
-    parser.add_argument("--resolution", dest='resol', help="Input resolution of network. Higher "
-                                                      "increases accuracy but decreases speed",
+    parser.add_argument("--resolution", dest='resol',
+                        help="Input resolution of network. Higher increases accuracy but decreases speed",
                         default=416, type=int)
     parser.add_argument("--letterbox_resize", type=lambda x: (str(x).lower() == 'true'), default=True,
                         help="Whether to use the letterbox resize.")

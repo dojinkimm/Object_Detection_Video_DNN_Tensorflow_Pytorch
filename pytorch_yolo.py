@@ -30,8 +30,10 @@ def main():
 
     VIDEO_PATH = args.video if not args.webcam else 0
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     print("Loading network.....")
-    model = Darknet(args.config)
+    model = Darknet(args.config).to(device)
     model.load_weights(args.weight)
     print("Network successfully loaded")
 
@@ -40,8 +42,6 @@ def main():
     assert inp_dim % 32 == 0
     assert inp_dim > 32
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
     model.eval()
 
     PATH_TO_LABELS = 'labels/coco.names'

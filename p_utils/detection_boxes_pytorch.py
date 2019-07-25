@@ -1,9 +1,10 @@
 from torchvision import transforms
-import torch
 import cv2
-from torch.autograd import Variable
 from p_utils.util import write_results, prep_image
+from p_utils.utils_v2 import non_max_suppression
 from colors import *
+from torch.autograd import Variable
+import torch
 
 
 def get_class_names(label_path):
@@ -27,7 +28,9 @@ class DetectBoxes:
 
         with torch.no_grad():
             output = model(Variable(img), self.device)
+
         output = write_results(output, self.confThreshold, len(self.classes), nms=True, nms_conf=self.nmsThreshold)
+        # print(output)
 
         im_dim = im_dim.repeat(output.size(0), 1)
         scaling_factor = torch.min(inp_dim / im_dim, 1)[0].view(-1, 1)
@@ -36,7 +39,6 @@ class DetectBoxes:
         output[:, [2, 4]] -= (inp_dim - scaling_factor * im_dim[:, 1].view(-1, 1)) / 2
 
         output[:, 1:5] /= scaling_factor
-
         for i in range(output.shape[0]):
             output[i, [1, 3]] = torch.clamp(output[i, [1, 3]], 0.0, im_dim[i, 0])
             output[i, [2, 4]] = torch.clamp(output[i, [2, 4]], 0.0, im_dim[i, 1])
@@ -53,6 +55,39 @@ class DetectBoxes:
             color = STANDARD_COLORS[(cls+1) % len(STANDARD_COLORS)]
 
             self.draw_boxes(frame, self.classes[cls+1], outs[5],  left, top, right, bottom, color)
+
+    def bounding_box_yolo_v2(self, frame, inp_dim, model):
+        img, orig_im, dim = prep_image(frame, 416)
+        im_dim = torch.FloatTensor(dim).repeat(1, 2).to("cuda")
+        img = img.to(self.device)
+
+        input_imgs = Variable(img)
+
+        with torch.no_grad():
+            detections = model(input_imgs)
+            detections = non_max_suppression(detections, self.confThreshold, self.nmsThreshold)
+
+        detections = detections[0]
+        if detections is not None:
+            im_dim = im_dim.repeat(detections.size(0), 1)
+            scaling_factor = torch.min(inp_dim / im_dim, 1)[0].view(-1, 1)
+
+            detections[:, [0, 2]] -= ((inp_dim - scaling_factor * im_dim[:, 0].view(-1, 1)) / 2).cpu()
+            detections[:, [1, 3]] -= ((inp_dim - scaling_factor * im_dim[:, 1].view(-1, 1)) / 2).cpu()
+
+            detections[:, 0:4] /= scaling_factor.cpu()
+
+            for index, out in enumerate(detections):
+                outs = out.tolist()
+                left = int(outs[0])
+                top = int(outs[1])
+                right = int(outs[2])
+                bottom = int(outs[3])
+
+                cls = int(outs[-1])
+                color = STANDARD_COLORS[(cls + 1) % len(STANDARD_COLORS)]
+
+                self.draw_boxes(frame, self.classes[cls+1], outs[5], left, top, right, bottom, color)
 
     # detect bounding boxes rcnn
     def bounding_box_rcnn(self, frame, model):
@@ -99,3 +134,5 @@ class DetectBoxes:
         cv2.rectangle(frame, (left, top - round(1.5 * label_size[1])),
                       (left + round(1.5 * label_size[0]), top + base_line), color=color, thickness=cv2.FILLED)
         cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color=txt_color, thickness=2)
+
+
