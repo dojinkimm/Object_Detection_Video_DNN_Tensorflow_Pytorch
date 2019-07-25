@@ -4,7 +4,7 @@ import time
 import cv2
 import sys
 import torch
-from models.darknet_pytorch import Darknet
+from models.darknet_pytorch_v2 import Darknet
 from p_utils.detection_boxes_pytorch import DetectBoxes
 
 def arg_parse():
@@ -12,7 +12,7 @@ def arg_parse():
 
     parser = argparse.ArgumentParser(description='Pytorch Yolov3')
     parser.add_argument("--video", help="Path where video is located",
-                        default="assets/cars3.mp4", type=str)
+                        default="assets/cars.mp4", type=str)
     parser.add_argument("--config",  help="Yolov3 config file", default="darknet/yolov3.cfg")
     parser.add_argument("--weight",  help="Yolov3 weight file", default="darknet/yolov3.weights")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
