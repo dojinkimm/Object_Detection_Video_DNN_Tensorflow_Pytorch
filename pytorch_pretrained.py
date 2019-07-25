@@ -47,7 +47,6 @@ def main():
     # load detection class, default confidence threshold is 0.5
     detect = DetectBoxes(PATH_TO_LABELS, conf_threshold=args.confidence)
 
-
     # Process inputs
     winName = 'Faster-RCNN-Pytorch'
     try:
@@ -56,7 +55,6 @@ def main():
     except IOError:
         print("Input video file", VIDEO_PATH, "doesn't exist")
         sys.exit(1)
-
 
     while cap.isOpened():
         hasFrame, frame = cap.read()
@@ -84,5 +82,5 @@ def main():
 
 
 # Starting a program
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

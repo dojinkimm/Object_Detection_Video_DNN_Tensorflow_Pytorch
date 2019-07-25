@@ -3,6 +3,7 @@ import torch
 import cv2
 from torch.autograd import Variable
 from p_utils.util import write_results, prep_image
+from colors import *
 
 
 def get_class_names(label_path):
@@ -49,7 +50,9 @@ class DetectBoxes:
 
             cls = int(outs[-1])
 
-            self.draw_boxes(frame, self.classes[cls+1], outs[5],  left, top, right, bottom)
+            color = STANDARD_COLORS[(cls+1) % len(STANDARD_COLORS)]
+
+            self.draw_boxes(frame, self.classes[cls+1], outs[5],  left, top, right, bottom, color)
 
     # detect bounding boxes rcnn
     def bounding_box_rcnn(self, frame, model):
@@ -66,6 +69,7 @@ class DetectBoxes:
         pred_boxes = [[(i[0], i[1]), (i[2], i[3])] for i in list(pred[0]['boxes'].detach().cpu().clone().numpy())]
         pred_score = list(pred[0]['scores'].detach().cpu().clone().numpy())
         pred_t = [pred_score.index(x) for x in pred_score if x > self.confThreshold][-1]
+        pred_colors = [i for i in list(pred[0]['labels'].cpu().clone().numpy())]
         pred_boxes = pred_boxes[:pred_t + 1]
         pred_class = pred_class[:pred_t + 1]
 
@@ -75,10 +79,16 @@ class DetectBoxes:
             right = int(pred_boxes[i][1][0])
             bottom = int(pred_boxes[i][1][1])
 
-            self.draw_boxes(frame, pred_class[i], pred_score[i], left, top, right, bottom)
+            color = STANDARD_COLORS[pred_colors[i] % len(STANDARD_COLORS)]
 
-    def draw_boxes(self, frame, class_id, score, left, top, right, bottom):
-        cv2.rectangle(frame, (left, top), (right, bottom), (255, 178, 50), 3)
+            self.draw_boxes(frame, pred_class[i], pred_score[i], left, top, right, bottom, color)
+
+    def draw_boxes(self, frame, class_id, score, left, top, right, bottom, color):
+        txt_color = (0, 0, 0)
+        if sum(color) < 500:
+            txt_color = (255, 255, 255)
+
+        cv2.rectangle(frame, (left, top), (right, bottom), color=color, thickness=3)
 
         label = '{}%'.format(round((score * 100), 1))
         if self.classes:
@@ -87,5 +97,5 @@ class DetectBoxes:
         label_size, base_line = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
         top = max(top, label_size[1])
         cv2.rectangle(frame, (left, top - round(1.5 * label_size[1])),
-                      (left + round(1.5 * label_size[0]), top + base_line), (255,255,255), cv2.FILLED)
-        cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 0), thickness=2)
+                      (left + round(1.5 * label_size[0]), top + base_line), color=color, thickness=cv2.FILLED)
+        cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color=txt_color, thickness=2)
