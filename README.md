@@ -119,11 +119,12 @@ python tensorflow_pretrained.py --video assets/cars.mp4 --frozen /path/to/frozen
 ```Shell
 python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --achor_path darknet/yolo_anchors.txt --resolution 416
 ```
-
+<div align="center">
 <img src="readme/macpro.gif" width="600px"/>
+</div>
 <div style="display:inline-block;">
-<img src="readme/peopledesk.png" height="300px"/>
-<img src="readme/cars.png" height="300px"/>
+<img src="readme/peopledesk.png" height="250px"/>
+<img src="readme/cars.png" height="250px"/>
 </div>
 
 
