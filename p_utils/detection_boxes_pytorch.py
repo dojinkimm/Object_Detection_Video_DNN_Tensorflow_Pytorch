@@ -1,7 +1,6 @@
 from torchvision import transforms
 import cv2
-from p_utils.util import write_results, prep_image
-from p_utils.utils_v2 import non_max_suppression
+from p_utils.utils import non_max_suppression, prep_image
 from colors import *
 from torch.autograd import Variable
 import torch
@@ -22,41 +21,6 @@ class DetectBoxes:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def bounding_box_yolo(self, frame, inp_dim, model):
-        img, orig_im, dim = prep_image(frame, inp_dim)
-        im_dim = torch.FloatTensor(dim).repeat(1, 2).to(self.device)
-        img = img.to(self.device)
-
-        with torch.no_grad():
-            output = model(Variable(img), self.device)
-
-        output = write_results(output, self.confThreshold, len(self.classes), nms=True, nms_conf=self.nmsThreshold)
-        # print(output)
-
-        im_dim = im_dim.repeat(output.size(0), 1)
-        scaling_factor = torch.min(inp_dim / im_dim, 1)[0].view(-1, 1)
-
-        output[:, [1, 3]] -= (inp_dim - scaling_factor * im_dim[:, 0].view(-1, 1)) / 2
-        output[:, [2, 4]] -= (inp_dim - scaling_factor * im_dim[:, 1].view(-1, 1)) / 2
-
-        output[:, 1:5] /= scaling_factor
-        for i in range(output.shape[0]):
-            output[i, [1, 3]] = torch.clamp(output[i, [1, 3]], 0.0, im_dim[i, 0])
-            output[i, [2, 4]] = torch.clamp(output[i, [2, 4]], 0.0, im_dim[i, 1])
-
-        for index, out in enumerate(output):
-            outs = out.tolist()
-            left = int(outs[1])
-            top = int(outs[2])
-            right = int(outs[3])
-            bottom = int(outs[4])
-
-            cls = int(outs[-1])
-
-            color = STANDARD_COLORS[(cls+1) % len(STANDARD_COLORS)]
-
-            self.draw_boxes(frame, self.classes[cls+1], outs[5],  left, top, right, bottom, color)
-
-    def bounding_box_yolo_v2(self, frame, inp_dim, model):
         img, orig_im, dim = prep_image(frame, 416)
         im_dim = torch.FloatTensor(dim).repeat(1, 2).to("cuda")
         img = img.to(self.device)

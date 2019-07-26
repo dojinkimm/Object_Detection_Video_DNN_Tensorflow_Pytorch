@@ -6,7 +6,7 @@ from __future__ import division, print_function
 
 import tensorflow as tf
 
-from models.darknet_pytorch import Darknet
+from models.darknet_tensorflow import Darknet
 from t_utils.data_process import parse_anchors, load_weights
 
 num_class = 80
