@@ -1,5 +1,4 @@
 # coding: utf-8
-
 from __future__ import division, print_function
 
 import tensorflow as tf
@@ -17,7 +16,7 @@ from t_utils import detection_boxes_tensorflow as vis
 
 def arg_parse():
     parser = argparse.ArgumentParser(description="Tensorflow Yolov3")
-    parser.add_argument("--video", dest='video', help="Path where video is located",
+    parser.add_argument("--video", help="Path where video is located",
                         default="assets/cars.mp4", type=str)
     parser.add_argument("--ckpt",  type=str, default="darknet/yolov3.ckpt",
                         help="The path of the weights to restore.")

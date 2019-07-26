@@ -12,14 +12,14 @@ import sys
 import time
 from torchvision import models
 import torch
-from p_utils.detection_boxes_pytorch import DetectBoxes
+from p_utils.detection_boxes_pytorch_v2 import DetectBoxes
 
 
 def arg_parse():
     """ Parsing Arguments for detection """
 
     parser = argparse.ArgumentParser(description='Pytorch Pretrained FasterRCNN')
-    parser.add_argument("--video", dest='video', help="Path where video is located",
+    parser.add_argument("--video", help="Path where video is located",
                         default="assets/cars.mp4", type=str)
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
     parser.add_argument("--webcam", help="Detect with web camera", default=False)

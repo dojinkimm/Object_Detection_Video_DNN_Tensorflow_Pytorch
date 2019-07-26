@@ -3,6 +3,7 @@ import os
 import tensorflow as tf
 import cv2
 import argparse
+import imutils
 
 from t_utils import ops as utils_ops, detection_boxes_tensorflow as vis
 from t_utils import label_map_util
@@ -14,9 +15,9 @@ def arg_parse():
     """ Parsing Arguments for detection """
 
     parser = argparse.ArgumentParser(description='Tensorflow Pretrained')
-    parser.add_argument("--video", dest='video', help="Path where video is located",
+    parser.add_argument("--video", help="Path where video is located",
                         default="assets/cars.mp4", type=str)
-    parser.add_argument("--frozen", dest="frozen", help="Frozen inference pb file",
+    parser.add_argument("--frozen", help="Frozen inference pb file",
                         default="faster_rcnn_resnet101_coco_2018_01_28/frozen_inference_graph.pb")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
     parser.add_argument("--webcam", help="Detect with web camera", default=False)
@@ -109,6 +110,8 @@ def main():
                     hasFrame, image_np = cap.read()
                     if not hasFrame:
                         break
+
+                    image_np = imutils.resize(image_np, width=450)
 
                     # Actual Detection
                     start = time.time()
