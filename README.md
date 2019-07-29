@@ -36,7 +36,7 @@ https://github.com/wizyoung/YOLOv3_TensorFlow<br/>
 ```pip install tensorflow tensorflow-gpu```
 <br/>
 
-##How To Get Pre-trained Models
+## How To Get Pre-trained Models
 In the project pre-trained models were obtained from 3 sources. First, from tensorflow object detection api site.
 Second, from yolo site. Third, pre-trained model that is automatically downloaded by pytorch framework. 
 ### 1. Tensorflow Object Detection API
