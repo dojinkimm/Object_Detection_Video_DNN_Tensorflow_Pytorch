@@ -97,7 +97,7 @@ python opencv_maskrcnn.py --video assets/cars.mp4 --pbtxt /path/to/.pbtxt --froz
 
 #### Yolo Opencv
 ```Shell
-python opencv_yolo.py --video assets/cars.mp4 --config darknet/yolov3.config --weight darknet/yolov3.weights --conf 0.5 --nms 0.4 --resol 416
+python opencv_yolo.py --video assets/cars.mp4 --config darknet/yolov3.config --weight darknet/yolov3.weights --conf 0.5 --nms 0.4 --resolution 416
 ```
 
 #### FasterRCNN Pytorch
@@ -117,7 +117,7 @@ python tensorflow_pretrained.py --video assets/cars.mp4 --frozen /path/to/frozen
 
 #### Yolo Tensorflow
 ```Shell
-python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --achor_path darknet/yolo_anchors.txt --resolution 416
+python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --anchor_path darknet/yolo_anchors.txt --resolution 416
 ```
 <div align="center">
 <img src="readme/macpro.gif" width="600px"/>

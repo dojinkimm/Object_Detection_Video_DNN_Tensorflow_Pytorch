@@ -14,7 +14,7 @@ def arg_parse():
     parser.add_argument("--weight", help="Yolov3 weight file", default="darknet/yolov3.weights")
     parser.add_argument("--conf", dest="confidence", help="Confidence threshold for predictions", default=0.5)
     parser.add_argument("--nms", dest="nmsThreshold", help="NMS threshold", default=0.4)
-    parser.add_argument("--resol", dest='resol', help="Input resolution of network. Higher "
+    parser.add_argument("--resolution", dest='resol', help="Input resolution of network. Higher "
                                                       "increases accuracy but decreases speed",
                         default="416", type=str)
     parser.add_argument("--webcam", help="Detect with web camera", default=False)
