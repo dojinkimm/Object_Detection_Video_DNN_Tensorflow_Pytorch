@@ -5,7 +5,7 @@ import cv2
 import sys
 import torch
 from pytorch_v1.darknet_pytorch_v1 import Darknet
-from pytorch_v1.detection_boxex_pytorch import DetectBoxes
+from pytorch_v1.detection_boxes_pytorch_v1 import DetectBoxes
 
 def arg_parse():
     """ Parsing Arguments for detection """
@@ -19,7 +19,7 @@ def arg_parse():
     parser.add_argument("--nms", dest="nmsThreshold", help="NMS threshold", default=0.4)
     parser.add_argument("--resolution", dest='resol', help="Input resolution of network. Higher "
                                                            "increases accuracy but decreases speed",
-                        default="416", type=str)
+                        default="320", type=str)
     parser.add_argument("--webcam", help="Detect with web camera", default=False)
     return parser.parse_args()
 

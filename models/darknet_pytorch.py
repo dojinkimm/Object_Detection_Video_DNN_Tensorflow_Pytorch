@@ -13,8 +13,8 @@ def create_modules(module_defs):
     """
     Constructs module list of layer blocks from module configuration in module_defs
     """
-    hyperparams = module_defs.pop(0)
-    output_filters = [int(hyperparams["channels"])]
+    net_info = module_defs.pop(0)
+    output_filters = [int(net_info["channels"])]
     module_list = nn.ModuleList()
     for module_i, module_def in enumerate(module_defs):
         modules = nn.Sequential()
@@ -23,7 +23,12 @@ def create_modules(module_defs):
             bn = int(module_def["batch_normalize"])
             filters = int(module_def["filters"])
             kernel_size = int(module_def["size"])
-            pad = (kernel_size - 1) // 2
+            pad = int(module_def['pad'])
+            if pad:
+                pad = (kernel_size - 1) // 2
+            else:
+                pad = 0
+            # Add conv layer
             modules.add_module(
                 f"conv_{module_i}",
                 nn.Conv2d(
@@ -35,10 +40,15 @@ def create_modules(module_defs):
                     bias=not bn,
                 ),
             )
+            # Add batch norm layer
             if bn:
+                # modules.add_module(f"batch_norm_{module_i}", nn.BatchNorm2d(filters))
                 modules.add_module(f"batch_norm_{module_i}", nn.BatchNorm2d(filters, momentum=0.9, eps=1e-5))
+            # Check activation
+            # It is either Linear or Leaky ReLU for YOLO
             if module_def["activation"] == "leaky":
-                modules.add_module(f"leaky_{module_i}", nn.LeakyReLU(0.1))
+                # modules.add_module(f"leaky_{module_i}", nn.LeakyReLU(0.1))
+                modules.add_module(f"leaky_{module_i}", nn.LeakyReLU(0.1, inplace=True))
 
         elif module_def["type"] == "maxpool":
             kernel_size = int(module_def["size"])
@@ -68,15 +78,16 @@ def create_modules(module_defs):
             anchors = [(anchors[i], anchors[i + 1]) for i in range(0, len(anchors), 2)]
             anchors = [anchors[i] for i in anchor_idxs]
             num_classes = int(module_def["classes"])
-            img_size = int(hyperparams["height"])
+            img_size = int(net_info["height"])
             # Define detection layer
             yolo_layer = YOLOLayer(anchors, num_classes, img_size)
+
             modules.add_module(f"yolo_{module_i}", yolo_layer)
         # Register module list and number of output filters
         module_list.append(modules)
         output_filters.append(filters)
 
-    return hyperparams, module_list
+    return net_info, module_list
 
 
 class Upsample(nn.Module):
@@ -128,8 +139,8 @@ class YOLOLayer(nn.Module):
         self.anchor_w = self.scaled_anchors[:, 0:1].view((1, self.num_anchors, 1, 1))
         self.anchor_h = self.scaled_anchors[:, 1:2].view((1, self.num_anchors, 1, 1))
 
-    def forward(self, x, targets=None, img_dim=None):
 
+    def forward(self, x, targets=None, img_dim=None):
         # Tensors for cuda support
         FloatTensor = torch.cuda.FloatTensor if x.is_cuda else torch.FloatTensor
         LongTensor = torch.cuda.LongTensor if x.is_cuda else torch.LongTensor
@@ -233,7 +244,7 @@ class Darknet(nn.Module):
     def __init__(self, config_path, img_size=416):
         super(Darknet, self).__init__()
         self.module_defs = parse_model_config(config_path)
-        self.hyperparams, self.module_list = create_modules(self.module_defs)
+        self.net_info, self.module_list = create_modules(self.module_defs)
         self.yolo_layers = [layer[0] for layer in self.module_list if hasattr(layer[0], "metrics")]
         self.img_size = img_size
         self.seen = 0

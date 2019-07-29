@@ -28,6 +28,7 @@ def get_outputs_names(net):
     layer_names = net.getLayerNames()
     return [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
+
 def detection_gpu(frame_list, net, detect):
     frame_with_rect = []
     for frame in frame_list:

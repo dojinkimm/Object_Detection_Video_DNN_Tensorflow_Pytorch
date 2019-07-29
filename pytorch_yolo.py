@@ -5,7 +5,7 @@ import cv2
 import sys
 import torch
 from models.darknet_pytorch import Darknet
-from p_utils.detection_boxes_pytorch_v2 import DetectBoxes
+from p_utils.detection_boxes_pytorch import DetectBoxes
 
 def arg_parse():
     """ Parsing Arguments for detection """

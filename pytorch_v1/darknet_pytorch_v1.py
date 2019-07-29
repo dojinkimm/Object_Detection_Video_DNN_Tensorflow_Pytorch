@@ -77,9 +77,11 @@ class MaxPoolStride1(nn.Module):
         return pooled_x
 
 
+
 class EmptyLayer(nn.Module):
     def __init__(self):
         super(EmptyLayer, self).__init__()
+
 
 class DetectionLayer(nn.Module):
     def __init__(self, anchors):
@@ -91,6 +93,7 @@ class DetectionLayer(nn.Module):
         global CUDA
         prediction = x
         prediction = predict_transform(prediction, inp_dim, self.anchors, num_classes, confidence, CUDA)
+        print(inp_dim)
         return prediction
 
 class Upsample(nn.Module):
@@ -153,7 +156,6 @@ def create_modules(blocks):
         #If it's a convolutional layer
         if (x["type"] == "convolutional"):
             #Get the info about the layer
-            activation = x["activation"]
             try:
                 batch_normalize = int(x["batch_normalize"])
                 bias = False
@@ -182,10 +184,9 @@ def create_modules(blocks):
 
             #Check the activation.
             #It is either Linear or a Leaky ReLU for YOLO
-            if activation == "leaky":
-                activn = nn.LeakyReLU(0.1, inplace = True)
+            if x["activation"] == "leaky":
+                activn = nn.LeakyReLU(0.1, inplace=True)
                 module.add_module("leaky_{0}".format(index), activn)
-
 
 
         #If it's an upsampling layer

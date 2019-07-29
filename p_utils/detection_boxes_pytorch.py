@@ -21,7 +21,7 @@ class DetectBoxes:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def bounding_box_yolo(self, frame, inp_dim, model):
-        img, orig_im, dim = prep_image(frame, 416)
+        img, orig_im, dim = prep_image(frame, inp_dim)
         im_dim = torch.FloatTensor(dim).repeat(1, 2).to("cuda")
         img = img.to(self.device)
 

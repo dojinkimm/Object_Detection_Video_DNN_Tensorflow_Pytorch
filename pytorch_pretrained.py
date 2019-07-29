@@ -12,7 +12,7 @@ import sys
 import time
 from torchvision import models
 import torch
-from p_utils.detection_boxes_pytorch_v2 import DetectBoxes
+from p_utils.detection_boxes_pytorch import DetectBoxes
 
 
 def arg_parse():
