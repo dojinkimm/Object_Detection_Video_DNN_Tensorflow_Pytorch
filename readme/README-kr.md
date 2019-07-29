@@ -35,7 +35,7 @@ https://github.com/wizyoung/YOLOv3_TensorFlow<br/>
 ```pip install tensorflow tensorflow-gpu```
 
 
-##Pre-trained Models 다운 받는 방법
+## Pre-trained Models 다운 받는 방법
 프로젝트에서는 3군데에서 다운 받은 pre-trained model들을 사용했습니다. 
 ### 1. Tensorflow Object Detection API
 
