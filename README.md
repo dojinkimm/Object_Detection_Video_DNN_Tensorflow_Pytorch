@@ -34,7 +34,7 @@ https://github.com/wizyoung/YOLOv3_TensorFlow<br/>
 * tensorflow 1.14.0
 * tensorflow-gpu 1.1.0<br>
 ```pip install tensorflow tensorflow-gpu```
-
+<br/>
 
 ##How To Get Pre-trained Models
 In the project pre-trained models were obtained from 3 sources. First, from tensorflow object detection api site.
