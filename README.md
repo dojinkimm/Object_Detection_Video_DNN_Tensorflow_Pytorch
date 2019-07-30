@@ -87,37 +87,69 @@ Assuming that video file is under `assets` directory and yolo `weights, ckpt, cf
 Replace `/path/to/...` part with actual path to files.
 #### FasterRCNN Opencv
 ```
-python opencv_fasterrcnn.py --video assets/cars.mp4 --pbtxt /path/to/.pbtxt --frozen /path/to/frozen_inference_graph.pb --conf 0.5
+python opencv_fasterrcnn.py \
+    --video assets/cars.mp4 \
+    --pbtxt /path/to/.pbtxt \
+    --frozen /path/to/frozen_inference_graph.pb \
+    --conf 0.5
 ```
 
 #### MaskRCNN Opencv
 ```Shell
-python opencv_maskrcnn.py --video assets/cars.mp4 --pbtxt /path/to/.pbtxt --frozen /path/to/frozen_inference_graph.pb --conf 0.5 --mask 0.3
+python opencv_maskrcnn.py \
+    --video assets/cars.mp4 \
+    --pbtxt /path/to/.pbtxt \
+    --frozen /path/to/frozen_inference_graph.pb \
+    --conf 0.5 \
+    --mask 0.3
 ```
 
 #### Yolo Opencv
 ```Shell
-python opencv_yolo.py --video assets/cars.mp4 --config darknet/yolov3.config --weight darknet/yolov3.weights --conf 0.5 --nms 0.4 --resolution 416
+python opencv_yolo.py \
+    --video assets/cars.mp4 \
+    --config darknet/yolov3.config \
+    --weight darknet/yolov3.weights \
+    --conf 0.5 \
+    --nms 0.4 \
+    --resolution 416
 ```
 
 #### FasterRCNN Pytorch
 ```Shell
-python pytorch_pretrained.py --video assets/cars.mp4 --conf 0.5
+python pytorch_pretrained.py \
+    --video assets/cars.mp4 \
+    --conf 0.5
 ```
 
 #### Yolo Pytorch
 ```Shell
-python pytorch_yolo.py --video assets/cars.mp4 --config darknet/yolov3.config --weight darknet/yolov3.weights --conf 0.5 --nms 0.4 --resolution 416
+python pytorch_yolo.py \
+    --video assets/cars.mp4 \
+    --config darknet/yolov3.config \
+    --weight darknet/yolov3.weights \
+    --conf 0.5 \
+    --nms 0.4 \
+    --resolution 416
 ```
 
 #### FasterRCNN Tensorflow
 ```Shell
-python tensorflow_pretrained.py --video assets/cars.mp4 --frozen /path/to/frozen_inference_graph.pb --conf 0.5
+python tensorflow_pretrained.py \
+    --video assets/cars.mp4 \
+    --frozen /path/to/frozen_inference_graph.pb \
+    --conf 0.5
 ```
 
 #### Yolo Tensorflow
 ```Shell
-python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --anchor_path darknet/yolo_anchors.txt --resolution 416
+python tensorflow_yolo.py \
+    --video assets/cars.mp4 \
+    --ckpt darknet/yolov3.ckpt \
+    --conf 0.5 \
+    --nms 0.4 \
+    --anchor_path darknet/yolo_anchors.txt \
+    --resolution 416
 ```
 <div align="center">
 <img src="readme/macpro.gif" width="600px"/>
@@ -132,7 +164,9 @@ python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --c
 In order to run object detection on webcam, simply remove `--video` and add `--webcam True`. This is same to other programs as well.<br/>
 Example)  fasterrcnn pytorch
 ```Shell
-python pytorch_pretrained.py --webcam True --conf 0.5
+python pytorch_pretrained.py \
+    --webcam True \
+    --conf 0.5
 ```
 
 ### Credits:

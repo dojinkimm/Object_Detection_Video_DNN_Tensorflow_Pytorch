@@ -87,42 +87,91 @@ python convert_weight.py
 추가로, 밑에 `/path/to/...` 이러한 부분이 나오면 해당 파일이 있는 경로로 대체를 해야합니다.
 #### FasterRCNN Opencv
 ```
-python opencv_fasterrcnn.py --video assets/cars.mp4 --pbtxt /path/to/.pbtxt --frozen /path/to/frozen_inference_graph.pb --conf 0.5
+python opencv_fasterrcnn.py \
+    --video assets/cars.mp4 \
+    --pbtxt /path/to/.pbtxt \
+    --frozen /path/to/frozen_inference_graph.pb \
+    --conf 0.5
 ```
 
 #### MaskRCNN Opencv
 ```Shell
-python opencv_maskrcnn.py --video assets/cars.mp4 --pbtxt /path/to/.pbtxt --frozen /path/to/frozen_inference_graph.pb --conf 0.5 --mask 0.3
+python opencv_maskrcnn.py \
+    --video assets/cars.mp4 \
+    --pbtxt /path/to/.pbtxt \
+    --frozen /path/to/frozen_inference_graph.pb \
+    --conf 0.5 \
+    --mask 0.3
 ```
 
 #### Yolo Opencv
 ```Shell
-python opencv_yolo.py --video assets/cars.mp4 --config darknet/yolov3.config --weight darknet/yolov3.weights --conf 0.5 --nms 0.4 --resol 416
+python opencv_yolo.py \
+    --video assets/cars.mp4 \
+    --config darknet/yolov3.config \
+    --weight darknet/yolov3.weights \
+    --conf 0.5 \
+    --nms 0.4 \
+    --resolution 416
 ```
 
 #### FasterRCNN Pytorch
 ```Shell
-python pytorch_pretrained.py --video assets/cars.mp4 --conf 0.5
+python pytorch_pretrained.py \
+    --video assets/cars.mp4 \
+    --conf 0.5
 ```
 
 #### Yolo Pytorch
 ```Shell
-python pytorch_yolo.py --video assets/cars.mp4 --config darknet/yolov3.config --weight darknet/yolov3.weights --conf 0.5 --nms 0.4 --resolution 416
+python pytorch_yolo.py \
+    --video assets/cars.mp4 \
+    --config darknet/yolov3.config \
+    --weight darknet/yolov3.weights \
+    --conf 0.5 \
+    --nms 0.4 \
+    --resolution 416
 ```
 
 #### FasterRCNN Tensorflow
 ```Shell
-python tensorflow_pretrained.py --video assets/cars.mp4 --frozen /path/to/frozen_inference_graph.pb --conf 0.5
+python tensorflow_pretrained.py \
+    --video assets/cars.mp4 \
+    --frozen /path/to/frozen_inference_graph.pb \
+    --conf 0.5
 ```
 
 #### Yolo Tensorflow
 ```Shell
-python tensorflow_yolo.py --video assets/cars.mp4 --ckpt darknet/yolov3.ckpt --conf 0.5 --nms 0.4 --achor_path darknet/yolo_anchors.txt --resolution 416
+python tensorflow_yolo.py \
+    --video assets/cars.mp4 \
+    --ckpt darknet/yolov3.ckpt \
+    --conf 0.5 \
+    --nms 0.4 \
+    --anchor_path darknet/yolo_anchors.txt \
+    --resolution 416
 ```
+<div align="center">
+<img src="readme/macpro.gif" width="600px"/>
+</div>
+<div style="display:inline-block;">
+<img src="readme/peopledesk.png" height="250px"/>
+<img src="readme/cars.png" height="250px"/>
+</div>
+
 
 ## Running Demo on Webcam
 내장되있는 카메라로 object detection 프로그램을 실행시키려면 `--video`를 argument에서 제거해주시고 `--webcam True`를 넣으면 됩니다. 이 사항은 모든 프로그램에서 동일하게 적용됩니다.<br/>
 예)  fasterrcnn pytorch
 ```Shell
-python pytorch_pretrained.py --webcam True --conf 0.5
+python pytorch_pretrained.py \
+    --webcam True \
+    --conf 0.5
 ```
+
+### Credits:
+Video by Pixabay from Pexels<br/>
+Video by clara blasco from Pexels <br/>
+Video by Pixly Videos from Pexels<br/>
+Video by Life of Pix from Pexels<br/>
+Video by George Morina from Pexels <br/>
