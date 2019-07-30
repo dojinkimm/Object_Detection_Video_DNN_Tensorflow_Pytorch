@@ -14,7 +14,8 @@
 * Opencv Dnn, Pytorch FasterRCNN <br/>
 https://github.com/spmallick/learnopencv
 * Pytorch-Yolo <br/>
-https://github.com/ayooshkathuria/pytorch-yolo-v3
+https://github.com/ayooshkathuria/pytorch-yolo-v3<br/>
+https://github.com/eriklindernoren/PyTorch-YOLOv3.git
 * Tensorflow, Tensorflow-Yolo <br/>
 https://github.com/tensorflow/models/tree/master/research/object_detection<br/> 
 https://github.com/wizyoung/YOLOv3_TensorFlow<br/>
