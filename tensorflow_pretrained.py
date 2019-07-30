@@ -111,7 +111,7 @@ def main():
                     if not hasFrame:
                         break
 
-                    image_np = imutils.resize(image_np, width=450)
+                    # image_np = imutils.resize(image_np, width=450)
 
                     # Actual Detection
                     start = time.time()
