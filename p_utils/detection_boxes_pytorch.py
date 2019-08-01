@@ -51,7 +51,7 @@ class DetectBoxes:
                 cls = int(outs[-1])
                 color = STANDARD_COLORS[(cls + 1) % len(STANDARD_COLORS)]
 
-                self.draw_boxes(frame, self.classes[cls+1], outs[5], left, top, right, bottom, color)
+                self.draw_boxes(frame, self.classes[cls+1], outs[4], left, top, right, bottom, color)
 
     # detect bounding boxes rcnn
     def bounding_box_rcnn(self, frame, model):
