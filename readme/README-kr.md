@@ -153,11 +153,11 @@ python tensorflow_yolo.py \
     --resolution 416
 ```
 <div align="center">
-<img src="readme/macpro.gif" width="600px"/>
+<img src="macpro.gif" width="600px"/>
 </div>
 <div style="display:inline-block;">
-<img src="readme/peopledesk.png" height="250px"/>
-<img src="readme/cars.png" height="250px"/>
+<img src="peopledesk.png" height="250px"/>
+<img src="cars.png" height="250px"/>
 </div>
 
 
