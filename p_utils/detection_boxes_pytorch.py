@@ -22,7 +22,7 @@ class DetectBoxes:
 
     def bounding_box_yolo(self, frame, inp_dim, model):
         img, orig_im, dim = prep_image(frame, inp_dim)
-        im_dim = torch.FloatTensor(dim).repeat(1, 2).to("cuda")
+        im_dim = torch.FloatTensor(dim).repeat(1, 2).to(self.device)
         img = img.to(self.device)
 
         input_imgs = Variable(img)
